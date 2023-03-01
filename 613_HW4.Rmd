@@ -1,0 +1,92 @@
+---
+title: "DATA-613 HW 4"
+output: word_document
+date: "2023-02-09"
+---
+```{r}
+library(tidyverse)
+library(purrr)
+library(dplyr)
+```
+
+
+```{r, message=FALSE}
+# QUESTION 1
+  #a
+nrow(iris)
+map(iris, ~length(.x))
+
+  #b
+unique <- iris%>%
+  map_dbl(n_distinct)
+unique
+```
+
+```{r}
+# QUESTION 2
+matrix1 = matrix(nrow=3, ncol=5) 
+for(i in 0:nrow(matrix1))        
+{
+  for(j in 0:ncol(matrix1))     
+  {
+    matrix1[i,j] = j-i       
+  }
+}
+print(matrix1)
+
+```
+
+```{r}
+# QUESTION 3
+tribble( ~mean,  ~n,
+           -10,   10,
+             0,   10,
+            -10,  10,
+            100,  10
+        ) -> parameters
+
+pmap(parameters, rnorm)
+pmap(parameters, rnorm)
+```
+
+```{r}
+# QUESTION 4
+X <- list(12, 14, 15, 18, 19, 22,10,18,18)
+Mean <- list(16, 16, 16, 16, 16,16,16,16,16)
+sd <- list(2, 2, 2, 2, 2,2,2,2,2)
+
+  #a
+pmap_dbl(list(X, Mean, sd), function(input, mu, sigma) (input-mu)/sigma)
+
+  #b***
+pmap_dbl(list(X, Mean, sd), function(input, mu, sigma)
+  (input-mu)/(sigma/sqrt(length(input))))
+```
+
+```{r}
+# QUESTION 5
+
+  #a
+V <- c(10, 15, 17, 22, 32, 38, 42)
+V%>%
+  keep(function(x) x < 20)
+
+  #b
+V%>%
+  discard(function(x) x < 20)
+
+```
+
+```{r}
+# QUESTION 6
+U = list(10,15,"mary",22,32,"james",42)
+map(U, safely(~ .x + 15))
+
+  ## The output for this function indicates the whether each value of the list
+  ## was able to be pass through the computation. It indicates the result of
+  ## of the computation if the value is numeric, and indicates the error as
+  ## NULL. If it was not possible to compute, the output indicates that there
+  ## was an error in computing, and points out the error. In this case, the
+  ## error was that both values were non-numeric.
+```
+
